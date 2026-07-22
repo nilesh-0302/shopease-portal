@@ -1,4 +1,4 @@
-const BASE_URL = 'http://13.201.72.156/:8000';
+const BASE_URL = 'http://13.201.72.156:8000';
 
 function auth_headers() {
   const token = localStorage.getItem('token');
