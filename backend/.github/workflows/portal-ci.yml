@@ -1,0 +1,35 @@
+name: ShopEase Portal CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    env:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/shopease
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install fastapi asyncpg sqlalchemy[asyncio] alembic python-dotenv uvicorn pydantic python-jose[cryptography] passlib bcrypt==4.0.1 python-multipart
+
+      - name: Check app imports correctly
+        run: |
+          python -c "from app.main import app; print('App loaded successfully')"
+
+      - name: Check all route files exist
+        run: |
+          python -c "from app.routes import orders, tickets, tracking; print('All routes imported successfully')"
